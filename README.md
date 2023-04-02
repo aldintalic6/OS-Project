@@ -12,7 +12,7 @@ Note: In all programs, the code is commented in detail
 
 program1.c  => Task 1.1. advanced, Task 1.2. basic, intermediate, Task 1.3. basic
 
-This program covers Task 1.1 (advanced), Task 1.2 (basic, intermediate) and Task 1.3 (basic).The program is in an infinite loop, always asking the user for input. The prompt is in the machinename@username:~$ format (Task 1.1. advanced) and it changes depending on the machine and user. The commands cd, ls, mkdir, uptime are implemented (Task 1.2. basic), as well as two additional commands "help" and "exit". The cd, ls and mkdir commands are implemented in a way allowing them to have more options (Task 1.2. Intermediate). The program also includes the implementation of fork(), exec() and wait() (Task 1.3. basic). 
+This program covers Task 1.1 (advanced), Task 1.2 (basic, intermediate) and Task 1.3 (basic).The program is in an infinite loop, always asking the user for input. The prompt is in the machinename@username:~$ format (Task 1.1. advanced) and it changes depending on the machine and user. The commands ls, mkdir, uptime and sl are implemented (Task 1.2. basic), as well as two additional commands "help" and "exit". The ls and mkdir commands are implemented in a way allowing them to have more arguments (ls -l and mkdir -p) (Task 1.2. Intermediate). The program also includes the implementation of fork(), exec() and wait() (Task 1.3. basic). 
 
 Instructions for compiling: 
 - open terminal in "programs" directory. 
