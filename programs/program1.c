@@ -49,22 +49,20 @@ void machinename_username() {  // TASK 1.1.
 }
 
 void commands(char **args) {
-    
+			    
         // Built-in functions
         // strcmp() compares two strings, returns 0 if they are equal
         
-        if (strcmp(args[0], "cd") == 0) { 
-            if (strcmp(args[1], "-") == 0) {  // Command enables to switch to the last working directory
-                chdir(getenv("OLDPWD"));  // Changes working directory to previous directory
-            }
-                else chdir(args[1]); // Changes working directory that is specified in args[1] e.g. cd Desktop changes directory to Desktop
-            
+        if (strcmp(args[0], "sl") == 0) {  // Needs to be installed with sudo apt install sl
+	args[1] = NULL;
+	execute_command(args);  
+
         } else if (strcmp(args[0], "exit") == 0) { // Exits process
             exit(EXIT_SUCCESS);
             
         } else if (strcmp(args[0], "help") == 0) {
             printf("This is the help section.\n");
-            printf("Available commands: ls, mkdir, uptime, cd \n");
+            printf("Available commands: exit, ls, mkdir, uptime, sl \n");
             
         } else if (strcmp(args[0], "ls") == 0) { 
 
@@ -77,13 +75,13 @@ void commands(char **args) {
                     args[1] = "-l";
                     args[2] = NULL;
                     execute_command(args);
-                    
-                }
-                i++;  // If -l is not at index[i], i is incremented
+
+              } 
+		i++; // If -l is not at index[i], i is incremented
             }
 
-            execute_command(args); // If -l is not presented only ls is executed
-            
+	    execute_command(args); // If -l is not presented only ls is executed
+
         } else if (strcmp(args[0], "mkdir") == 0) {
 
             // TASK 1.2. INTERMEDIATE: mkdir additional argument                    
@@ -104,11 +102,19 @@ void commands(char **args) {
             // Executes if -p is not present 
             execute_command(args);
 
+	} else if (strcmp(args[0], "uptime") == 0) {
+            args[1] = NULL;
+            execute_command(args);  
 
-      }    else {
+	} else if (strcmp(args[0], "clear") == 0) {
+
+	args[1] = NULL;
+	execute_command(args);
+
+      } else {
             
             // Execute different command
-            execute_command(args);		
+            printf("Command not found\nType 'help' to see available commands\n");		
         }
     
 }
@@ -129,6 +135,7 @@ int main(void) {
 	commands(args); // Calls command
 
 }
+
 return 0;
 }
 
