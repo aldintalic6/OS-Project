@@ -8,9 +8,10 @@
 #define MAX_LINE 80
 
 void parse_input(char *input, char **args) { // Splits the input string into separate words and stores them into the args array e.g. input = ls -l => args[0] = ls, args[1] = -l
+    
     // Parse input into arguments
     int i = 0;
-    char *token = strtok(input, " "); // Splits the input string into tokens
+    char *token = strtok(input, " ");   // Splits the input string into tokens
     while (token != NULL) {
         args[i++] = token;
         token = strtok(NULL, " ");
@@ -19,17 +20,18 @@ void parse_input(char *input, char **args) { // Splits the input string into sep
 }
 
 void execute_command(char **args) {
+    
     int pid = fork();  // Forks process
     if (pid == 0) { // Child process
     
         int execvariable = execvp(args[0], args);  // Executes command specified by args
         if (execvariable == -1) {
-	printf("Command not found: %s\n", args[0]); // If execvp returns -1, error occurred (command was not found)
-        exit(EXIT_FAILURE); }            
+	        printf("Command not found: %s\n", args[0]); // If execvp returns -1, error occurred (command was not found)
+            exit(EXIT_FAILURE); }            
         }
-     else {
-        // Parent process
-        wait(NULL);  // Parent waits till child is finished
+         else {
+            // Parent process
+            wait(NULL);  // Parent waits till child is finished
     }
 }
 
@@ -44,7 +46,7 @@ void machinename_username() {  // TASK 1.1.
             printf("Error getting hostname: %s\n", strerror(errno));
             exit(EXIT_FAILURE);
         } 
-        printf("%s@%s:~$ ", hostname, username);  
+    printf("%s@%s:~$ ", hostname, username);  
     
 }
 
@@ -53,73 +55,72 @@ void commands(char **args) {
         // Built-in functions
         // strcmp() compares two strings, returns 0 if they are equal
         
-        if (strcmp(args[0], "sl") == 0) {  // Needs to be installed with sudo apt install sl
-	args[1] = NULL;
-	execute_command(args);  
+        if (strcmp(args[0], "sl") == 0) {  // SL -  Needs to be installed with sudo apt install sl
+	        args[1] = NULL;
+	        execute_command(args);  
 
-        } else if (strcmp(args[0], "exit") == 0) { // Exits process
+        } else if (strcmp(args[0], "exit") == 0) { //  EXIT - Exits process
             exit(EXIT_SUCCESS);
             
-        } else if (strcmp(args[0], "help") == 0) {
+        } else if (strcmp(args[0], "help") == 0) {   // HELP
             printf("This is the help section.\n");
             printf("Available commands: exit, ls, mkdir, uptime, sl \n");
             
-        } else if (strcmp(args[0], "ls") == 0) { 
+        } else if (strcmp(args[0], "ls") == 0) {  // LS
 
             // TASK 1.2. INTERMEDIATE: ls additional argument
-            int i = 1;
-            while (args[i] != NULL) {
-                if (strcmp(args[i], "-l") == 0) { // Searches if there is -l
-                    // If -l is there, args array is modified
-                    args[0] = "ls";
-                    args[1] = "-l";
-                    args[2] = NULL;
-                    execute_command(args);
 
-              } 
-		i++; // If -l is not at index[i], i is incremented
-            }
+		if (args[1] == NULL || strcmp(args[1], "-l") == 0) {
+		// If only ls is inputted or ls -l 
+		execute_command(args);
+}
 
-	    execute_command(args); // If -l is not presented only ls is executed
+	   	else if (strcmp(args[1], "-l") != 0) { // If any other option is inputted
 
-        } else if (strcmp(args[0], "mkdir") == 0) {
+		   printf("Only -l option is available for ls\n");
+		}
+		
+        } else if (strcmp(args[0], "mkdir") == 0) {     // MKDIR
 
-            // TASK 1.2. INTERMEDIATE: mkdir additional argument                    
-	    int i = 1;
-            while (args[i] != NULL) {
-                if (strcmp(args[i], "-p") == 0) {
+            // TASK 1.2. INTERMEDIATE: mkdir additional argument    
+                   
+	       if (args[1] == NULL) {
+
+		    printf("Use mkdir with -p\n");
+		}
+	 
+               else if (strcmp(args[1], "-p") == 0) {
                     
-                    // If -p is present, args array is modified
-                    args[0] = "mkdir";  
-                    args[1] = "-p";
-                    args[2] = args[i+1];
-                    args[3] = NULL;
+                    // If -p is present, command is executed
                     execute_command(args);
                     
                 }
-                i++;
-            }                    
-            // Executes if -p is not present 
-            execute_command(args);
 
-	} else if (strcmp(args[0], "uptime") == 0) {
+		else if (strcmp(args[1], "-p") != 0) { // If -p is not present
+
+		    printf("Only -p option is available for mkdir\n");		
+
+		}          
+	
+        } else if (strcmp(args[0], "uptime") == 0) {  // UPTIME
+
             args[1] = NULL;
             execute_command(args);  
 
-	} else if (strcmp(args[0], "clear") == 0) {
+        } else if (strcmp(args[0], "clear") == 0) {   // CLEAR
 
-	args[1] = NULL;
-	execute_command(args);
+            args[1] = NULL;
+            execute_command(args);
 
       } else {
             
-            // Execute different command
+            // If user enters command that doesn't exist
             printf("Command not found\nType 'help' to see available commands\n");		
         }
     
 }
 
-int main(void) {
+int main() {
     char input[MAX_LINE]; 
     char *args[MAX_LINE/2 + 1]; 
 
@@ -132,7 +133,7 @@ int main(void) {
 
         parse_input(input, args);   // Sends input to get parsed
                         	    	                                                                                   
-	commands(args); // Calls command
+	    commands(args); // Calls command
 
 }
 
